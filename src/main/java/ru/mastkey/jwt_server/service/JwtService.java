@@ -20,6 +20,8 @@ import java.util.function.Function;
 @Service
 public class JwtService {
 
+    public static final int TOKEN_LIFE_TINE_IN_MINS = 60000 * 5;
+
     @Value("${token.signing.key}")
     private String jwtSigningKey;
 
@@ -71,7 +73,7 @@ public class JwtService {
     private String generateToken(Map<String, Object> extraClaims, UserDetails userDetails) {
         return Jwts.builder().setClaims(extraClaims).setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 100000 * 5))
+                .setExpiration(new Date(System.currentTimeMillis() + TOKEN_LIFE_TINE_IN_MINS))
                 .signWith(getSigningKey(), SignatureAlgorithm.HS256).compact();
     }
 
